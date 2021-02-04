@@ -13,26 +13,27 @@ in the same folder.
 
 function readCSV(path)
 	io.input(path)
-	local speedTable = {}
-	local heightTable = {}
+	local data1Table = {}
+	local data2Table = {}
 	for line in io.lines() do
 		sepPos = string.find(line, ";")
-		speedValue = string.sub(line, 1, sepPos)
-		heigthValue = string.sub(line, sepPos + 1)
-		table.insert(speedTable, speedValue)
-		table.insert(heightTable, heightValue)
+		data1Value = string.sub(line, 1, sepPos-1)
+		data2Value = string.sub(line, sepPos+1)
+		table.insert(data1Table, data1Value)
+		table.insert(data2Table, data2Value)
 	end
 	io.close()
-	return speedTable, heightTable
+	return data1Table, data2Table
 end
 
 oPath = MediaIn1:GetData('MediaProps').MEDIA_PATH
-speedTable, heightTable = readCSV(string.sub(oPath, 1, string.len(oPath) - 3) .. "csv")
-Text1:SetData("cpath", timeTable)
+data1Table, data2Table = readCSV(string.sub(oPath, 1, string.len(oPath) - 3) .. "csv")
 
+MediaOut1:SetData("data1", data1Table)
+MediaOut1:SetData("data2", data2Table)
 
 
 -- Add this to Settings/"Frame Render Script"
 
-timeTable = Text1:GetData("cpath")
+timeTable = Text1:GetData("data1")
 Text1["StyledText"] = timeTable[time + 1]
