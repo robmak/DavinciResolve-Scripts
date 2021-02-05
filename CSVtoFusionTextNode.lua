@@ -12,18 +12,19 @@ in the same folder.
 -- In Fusion create a Text+ node and add this to Settings/"Start Render Scripts":
 
 function readCSV(path)
-	io.input(path)
-	local data1Table = {}
-	local data2Table = {}
-	for line in io.lines() do
-		sepPos = string.find(line, ";")
-		data1Value = string.sub(line, 1, sepPos-1)
-		data2Value = string.sub(line, sepPos+1)
-		table.insert(data1Table, data1Value)
-		table.insert(data2Table, data2Value)
-	end
-	io.close()
-	return data1Table, data2Table
+  io.input(path)
+  local data1Table = {}
+  local data2Table = {}
+  for line in io.lines() do
+    sepPos = string.find(line, ";")
+    if sepPos then
+      data1Value = string.sub(line, 1, sepPos-1)
+      data2Value = string.sub(line, sepPos+1)
+      table.insert(data1Table, data1Value)
+      table.insert(data2Table, data2Value)
+    end
+  end
+  return data1Table, data2Table
 end
 
 oPath = MediaIn1:GetData('MediaProps').MEDIA_PATH
@@ -34,6 +35,5 @@ MediaOut1:SetData("data2", data2Table)
 
 
 -- Add this to Settings/"Frame Render Script"
-
-timeTable = Text1:GetData("data1")
+timeTable = MediaOut1:GetData("data1")
 Text1["StyledText"] = timeTable[time + 1]
